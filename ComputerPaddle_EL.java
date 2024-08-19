@@ -15,6 +15,7 @@ public class ComputerPaddle_EL
     private double vy; // vertical velocity of the paddle
     private double dist; //initializes distance variable
     private double destination=0; //initializes destination that the paddle will go to
+    private final double BOUNDARY = 10.0; //Boundary of the screen
     public ComputerPaddle_EL(){
         //Sets values of the horizontal radius of the paddle and the vertical radius of the paddle
         rx=0.2;
@@ -53,22 +54,23 @@ public class ComputerPaddle_EL
     }
     //Moves the paddle using similar triangles
     public void move(double x, double y, double vx, double vy){
-    //Checks if the ball is moving the proper direction and is in the proper area    
-    if((vx>0 && x>-1) || Math.abs(x)>10){
+    //Checks if the ball is moving the proper direction and is in the proper area
+    // the ball must be moving towards the computer paddle and the be on the right side of the screen    
+    if((vx>0 && x>-1) || Math.abs(x)>BOUNDARY){
         //Uses similar triangles as it finds the ratio of the horizontal and veritcal velocities and applies it the horizontal distance to find the vertical distance between the paddle and the ball's destination
-        dist=vy/vx*(9-x);
+        dist=vy/vx*(this.x-x);
         //Calculates final destination
-        if (x>-10) {
+        if (x>-BOUNDARY) {
             destination=y+dist;
         }       
         
         //returns the paddle to a vertical position of zero
-        if (Math.abs(x)>10) destination=0;
+        if (Math.abs(x)>BOUNDARY) destination=0;
         
         //Moves the paddle to the ball's destination until it reaches the end of the board so that the paddle does not go off screen or it reaches the destination
         if (Math.abs(this.y)!=Math.abs(destination)){
-            if (destination>this.y+this.vy && this.y+this.vy<10.2) this.y=this.y+this.vy;
-            if (destination<this.y-this.vy && this.y-this.vy>-10.2) this.y=this.y-this.vy;
+            if (destination>this.y+this.vy && this.y+this.vy<BOUNDARY + this.ry/4) this.y=this.y+this.vy;
+            if (destination<this.y-this.vy && this.y-this.vy>-BOUNDARY + this.ry/4) this.y=this.y-this.vy;
         }
     }
 }
